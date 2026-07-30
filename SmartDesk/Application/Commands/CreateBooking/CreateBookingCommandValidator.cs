@@ -9,7 +9,6 @@ namespace Application.Commands.CreateBooking
     {
         public CreateBookingCommandValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.EndTime).NotEmpty().GreaterThan(x => x.StartTime);
             RuleFor(x => x.StartTime).NotEmpty().GreaterThan(DateTime.UtcNow);
         }

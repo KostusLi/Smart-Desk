@@ -11,10 +11,16 @@ using System.Text;
 
 namespace Application.Handlers.BookingsHandlers
 {
-    public class CreateBookingCommandHandler(ISmartDeskDbContext _context, IExternalNotificationService externalNotificationService) : IRequestHandler<CreateBookingCommand, Guid>
+    public class CreateBookingCommandHandler(ISmartDeskDbContext _context, IExternalNotificationService externalNotificationService, ICurrentUserService currentUser) : IRequestHandler<CreateBookingCommand, Guid>
     {
         public async Task<Guid> Handle(CreateBookingCommand command, CancellationToken cancellationToken)
         {
+            var userId = currentUser.userId;
+            if(userId==null)
+            {
+                throw new BookingException("Вы не авторизованы");
+            }
+
             Room? givenRoom = await _context.Rooms.AsNoTracking().FirstOrDefaultAsync(x => x.Id == command.RoomId, cancellationToken);
             if (givenRoom == null || !givenRoom.IsActive)
             {
@@ -28,11 +34,11 @@ namespace Application.Handlers.BookingsHandlers
                 await SendMessageAndInvokeException("Комната уже занята в это время, выберите другое время или другую комнату", cancellationToken);
             }
 
-            Booking booking = new Booking(command.RoomId, command.UserName, command.StartTime, command.EndTime);
+            Booking booking = new Booking(command.RoomId, userId, command.StartTime, command.EndTime);
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync(cancellationToken);
 
-            await externalNotificationService.NotifyRoomCreatingAsync($"Успешно создана бронь для {command.UserName}", cancellationToken);
+            await externalNotificationService.NotifyRoomCreatingAsync($"Успешно создана бронь для {userId}", cancellationToken);
 
             return booking.Id;
         }

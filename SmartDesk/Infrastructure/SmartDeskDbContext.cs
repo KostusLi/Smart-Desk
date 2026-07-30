@@ -11,6 +11,7 @@ namespace Infrastructure
     {
         public DbSet<Room> Rooms { get; set; } = null!;
         public DbSet<Booking> Bookings { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
 
         public SmartDeskDbContext(DbContextOptions<SmartDeskDbContext> options) : base(options) { }

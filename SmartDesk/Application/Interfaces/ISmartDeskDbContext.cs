@@ -10,6 +10,7 @@ namespace Application.Interfaces
     {
         public DbSet<Room> Rooms { get; }
         public DbSet<Booking> Bookings { get; }
+        public DbSet<User> Users { get; }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

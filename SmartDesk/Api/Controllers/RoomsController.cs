@@ -2,6 +2,7 @@
 using Application.Queries;
 using Domain.DTOs;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace Api.Controllers
     public class RoomsController(IMediator _mediator) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateRoomAsync(CreateRoomCommand command)
         {
             Guid roomId = await _mediator.Send(command);
