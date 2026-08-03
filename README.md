@@ -8,7 +8,7 @@ REST API для системы бронирования переговорных
 
 ## Стек технологий
 
-* **Платформа:** C#, ASP.NET Core Web API
+* **Фреймворки/языки:** C#, ASP.NET Core Web API
 * **Архитектура:** Clean Architecture
 * **База данных:** PostgreSQL
 * **Безопасность:** JWT, BCrypt
